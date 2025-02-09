@@ -6,7 +6,6 @@ import { hash, compare } from 'bcrypt';
 
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './DTOS/create_user.dto';
-import { LoginUserDto } from './DTOS/login_user.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) { }
 
-  async login({ email, password }: LoginUserDto) {
+  async validateUser(email, password ): Promise<any> {
     const user = await this.userRepository.findOneBy({ email })
 
     if (!user) return new HttpException('', HttpStatus.NOT_FOUND)
@@ -25,10 +24,7 @@ export class AuthService {
 
     if (!checkPassword) return new HttpException('', HttpStatus.FORBIDDEN)
 
-    const payload = { id: user.id, email: user.email }
-    const token = await this.jwtService.sign(payload)
-    const data = { token }
-    return data;
+    return user;
 
   }
 
@@ -39,5 +35,11 @@ export class AuthService {
       ...userData,
       password: hashedPassword,
     });
+  }
+
+  async login(user: User) {
+    const payload = { id: user.id, email: user.email, tenantId: user.tenant_id }
+    const token = this.jwtService.sign(payload)
+    return { token }
   }
 }
