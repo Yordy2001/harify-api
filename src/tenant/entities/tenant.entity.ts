@@ -15,6 +15,9 @@ export class Tenant {
   @Column('jsonb')
   colors: Record<string, string>;
 
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+
   @OneToMany(() => User, (user) => user.tenant)
   users: User[];
 }
