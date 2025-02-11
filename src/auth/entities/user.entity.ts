@@ -1,4 +1,4 @@
-import { Tenant } from 'src/tenants/entities/tenant.entity';
+import { Tenant } from 'src/tenant/entities/tenant.entity';
 import {
   Column,
   Entity,

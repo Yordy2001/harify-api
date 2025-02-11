@@ -18,7 +18,7 @@ export class AuthService {
   async validateUser(email, password ): Promise<any> {
     const user = await this.userRepository.findOneBy({ email })
 
-    if (!user) return new HttpException('', HttpStatus.NOT_FOUND)
+    if (!user) return new HttpException('User not foud', HttpStatus.NOT_FOUND)
 
     const checkPassword = await compare(password, user.password);
 
@@ -29,6 +29,10 @@ export class AuthService {
   }
 
   async register(userData: CreateUserDto): Promise<any> {
+    const user = await this.userRepository.findOneBy({ tenant_id: userData.tenant_id })
+
+    if (user) return new HttpException('Tenant already use', HttpStatus.CONFLICT)
+  
     const saltOrRounds = 10;
     const hashedPassword = await hash(userData.password, saltOrRounds);
     return this.userRepository.save({
