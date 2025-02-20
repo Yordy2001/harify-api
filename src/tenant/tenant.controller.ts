@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TenantService } from './tenant.service';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
+import { UUID } from 'crypto';
 
 @Controller('tenant')
 export class TenantController {
@@ -17,18 +18,18 @@ export class TenantController {
     return this.tenantService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tenantService.findOne(+id);
+  @Get(':term')
+  findOne(@Param('term') term: UUID | string) {
+    return this.tenantService.findOne(term);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTenantDto: UpdateTenantDto) {
-    return this.tenantService.update(+id, updateTenantDto);
+  update(@Param('id') id:  UUID, @Body() updateTenantDto: UpdateTenantDto) {
+    return this.tenantService.update(id, updateTenantDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tenantService.remove(+id);
+  remove(@Param('id') id: UUID | string) {
+    return this.tenantService.remove(id);
   }
 }

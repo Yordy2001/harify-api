@@ -22,6 +22,7 @@ import { TenantModule } from './tenant/tenant.module';
         database: configService.get<string>('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true, // Solo para desarrollo
+        // logging: true, // Log querys only for test
       }),
     }),
     AuthModule,
