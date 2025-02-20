@@ -1,14 +1,17 @@
 import { User } from 'src/auth/entities/user.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Tenant {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   name: string;
 
+  @Column({ unique: true })
+  subdomain: string;
+  
   @Column()
   logo: string;
 
@@ -17,6 +20,12 @@ export class Tenant {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @DeleteDateColumn()
+  deleted_at:Date
 
   @OneToMany(() => User, (user) => user.tenant)
   users: User[];
