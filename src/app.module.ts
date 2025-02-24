@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TenantModule } from './tenant/tenant.module';
+import { TenantMiddleware } from './middleware/tenat.middleware';
 
 @Module({
   imports: [
@@ -31,4 +32,16 @@ import { TenantModule } from './tenant/tenant.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule implements NestModule{
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(TenantMiddleware)
+    .exclude(
+      {path: 'tenant', method: RequestMethod.POST},
+      {path: 'auth', method: RequestMethod.POST},
+    )
+    .forRoutes(
+      { path: 'tenant', method: RequestMethod.GET },
+      { path: 'user', method: RequestMethod.GET }
+    )
+  }
+}
