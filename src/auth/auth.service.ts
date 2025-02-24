@@ -35,7 +35,6 @@ export class AuthService {
       where: { email: userData.email },
       relations: ['tenant']
     })
-    console.log(user);
     
     if (user) return new HttpException('Email registrado en espacio de trabajo', HttpStatus.CONFLICT)
 
@@ -49,7 +48,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { id: user.id, email: user.email, role: user.role, tenant_id: user.tenant.subdomain }
+    const payload = { id: user.id, email: user.email, role: user.role, tenantId: user.tenant.subdomain }
     const token = this.jwtService.sign(payload)
     return { token }
   }
