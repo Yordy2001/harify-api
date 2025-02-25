@@ -13,11 +13,12 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
+  
   ) { }
 
-  async validateUser(email, password,): Promise<any> {
+  async validateUser(email, password, tenantId): Promise<any> {
     const user = await this.userRepository.findOne({
-      where: { email },
+      where: { email, tenant: {subdomain: tenantId} },
       relations: ['tenant'],
     });
 
@@ -25,7 +26,7 @@ export class AuthService {
 
     const checkPassword = await compare(password, user.password);
 
-    if (!checkPassword) return new HttpException('', HttpStatus.FORBIDDEN)
+    if (!checkPassword) return new HttpException('Credenciales invalidas', HttpStatus.FORBIDDEN)
 
     return user;
   }

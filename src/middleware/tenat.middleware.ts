@@ -9,16 +9,24 @@ interface JwtPayload {
     role: string[];
 }
 
+interface CustomRequest extends Request {
+    user?: JwtPayload;
+    tenantId: string;
+}
 
 @Injectable()
 export class TenantMiddleware implements NestMiddleware {
-    use(req: Request & { user?: JwtPayload }, res: Response, next: NextFunction) {
-        if (!req.user || !req.user.tenantId) {
-            throw new UnauthorizedException('No tienes un tenant asignado');
+
+    use(req: CustomRequest, res: Response, next: NextFunction) {
+
+        const tenantId = req.headers['x-tenant-subdomain'] as string
+
+        if (!tenantId) {
+            throw new UnauthorizedException('Tenant no proporcionado en la cabecera');
         }
 
-        // add Tenat to headers
-        req.headers['tenant-id'] = req.user.tenantId; 
+        req.headers['tenant-id'] = tenantId;  // add TenatId to headers
+        req.tenantId = tenantId; // add TenatId to req
         next();
     }
 }
