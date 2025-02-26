@@ -7,6 +7,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TenantModule } from './tenant/tenant.module';
 import { TenantMiddleware } from './middleware/tenat.middleware';
+import { ClientsModule } from './clients/clients.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TenantMiddleware } from './middleware/tenat.middleware';
     }),
     AuthModule,
     TenantModule,
+    ClientsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

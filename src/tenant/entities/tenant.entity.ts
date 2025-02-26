@@ -1,4 +1,5 @@
 import { User } from 'src/auth/entities/user.entity';
+import { Client } from 'src/clients/entities/client.entity';
 import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
@@ -29,4 +30,7 @@ export class Tenant {
 
   @OneToMany(() => User, (user) => user.tenant)
   users: User[];
+
+  @OneToMany(() => Client, (client) => client.tenant)
+  clients: Client[];
 }
