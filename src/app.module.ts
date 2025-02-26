@@ -6,8 +6,8 @@ import { AuthModule } from './auth/auth.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TenantModule } from './tenant/tenant.module';
-import { TenantMiddleware } from './middleware/tenat.middleware';
-import { ClientsModule } from './clients/clients.module';
+import { TenantMiddleware } from './shared/middleware/tenat.middleware';
+import { ClientsModule } from './modules/clients/clients.module';
 
 @Module({
   imports: [

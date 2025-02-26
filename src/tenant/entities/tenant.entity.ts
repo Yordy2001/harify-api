@@ -1,5 +1,5 @@
 import { User } from 'src/auth/entities/user.entity';
-import { Client } from 'src/clients/entities/client.entity';
+import { Client } from 'src/modules/clients/entities/client.entity';
 import { Column, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
