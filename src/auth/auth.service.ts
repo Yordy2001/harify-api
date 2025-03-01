@@ -13,7 +13,6 @@ export class AuthService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
     private jwtService: JwtService,
-  
   ) { }
 
   async validateUser(email, password, tenantId): Promise<any> {
@@ -31,7 +30,7 @@ export class AuthService {
     return user;
   }
 
-  async register(userData: CreateUserDto): Promise<any> { 
+  async register(userData: CreateUserDto): Promise<any> {
     const user = await this.userRepository.findOne({
       where: { email: userData.email },
       relations: ['tenant']
@@ -49,7 +48,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { id: user.id, email: user.email, role: user.role, tenantId: user.tenant.subdomain }
+    const payload = { id: user.id, email: user.email, role: user.role, tenantId: user.tenant.id, tenantSubdomain: user.tenant.subdomain}
     const token = this.jwtService.sign(payload)
     return { token }
   }

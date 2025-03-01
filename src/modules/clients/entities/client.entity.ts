@@ -11,7 +11,7 @@ export class Client {
     @Column({ nullable: false })
     name: string;
 
-    @Column()
+    @Column({ nullable: false, unique: true })
     whatsapp: string;
 
     @CreateDateColumn()

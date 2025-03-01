@@ -1,25 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthenticatedRequest } from 'src/shared/interfaces/autenticated-request.interface';
+import { UUID } from 'crypto';
 
 @Controller('clients')
+@UseGuards(AuthGuard('jwt'))
 export class ClientsController {
   constructor(private readonly clientsService: ClientsService) {}
 
   @Post()
-  create(@Body() createClientDto: CreateClientDto) {
-    return this.clientsService.create(createClientDto);
+  create(@Body() createClientDto: CreateClientDto, @Req() req: AuthenticatedRequest) {
+    const tenantId = req.user.tenantId
+    return this.clientsService.create(createClientDto, tenantId);
   }
 
   @Get()
-  findAll() {
-    return this.clientsService.findAll();
+  findAll(@Req() req: AuthenticatedRequest) {
+    
+    const tenantId = req.user.tenantId
+
+    return this.clientsService.findAll(tenantId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.clientsService.findOne(+id);
+  findOne(@Param('id') id: UUID) {
+    return this.clientsService.findOne(id);
   }
 
   @Patch(':id')
