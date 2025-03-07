@@ -9,7 +9,7 @@ import { UUID } from 'crypto';
 @Controller('clients')
 @UseGuards(AuthGuard('jwt'))
 export class ClientsController {
-  constructor(private readonly clientsService: ClientsService) {}
+  constructor(private readonly clientsService: ClientsService) { }
 
   @Post()
   create(@Body() createClientDto: CreateClientDto, @Req() req: AuthenticatedRequest) {
@@ -19,15 +19,18 @@ export class ClientsController {
 
   @Get()
   findAll(@Req() req: AuthenticatedRequest) {
-    
+
     const tenantId = req.user.tenantId
 
     return this.clientsService.findAll(tenantId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: UUID) {
-    return this.clientsService.findOne(id);
+  findOne(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
+
+    const tenantId = req.user.tenantId
+
+    return this.clientsService.findOne(id, tenantId);
   }
 
   @Patch(':id')

@@ -16,7 +16,7 @@ export class AuthController {
 
     const token = await this.authService.login(req.user);
 
-    response.cookie('jwt', token, { httpOnly: true, secure: true, maxAge: 3600000 });
+    response.cookie('jwt', token.token, { httpOnly: true, secure: true, maxAge: 3600000 });
 
     return response.send({ token, status: HttpStatus.OK })
   }

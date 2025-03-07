@@ -23,7 +23,7 @@ import { ClientsModule } from './modules/clients/clients.module';
         password: configService.get<string>('DATABASE_PASSWORD'),
         database: configService.get<string>('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: true, // Solo para desarrollo
+        synchronize: true, // develop mode only
         // logging: true, // Log querys only for test
       }),
     }),

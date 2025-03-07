@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UUID } from 'crypto';
+import { Repository } from 'typeorm';
+
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from './entities/client.entity';
-import { Repository } from 'typeorm';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class ClientsService {
@@ -29,19 +30,28 @@ export class ClientsService {
 
   async findAll(tenantId: string | UUID) {
 
-    const clientsByTenantId = await this.clientRepository.findBy({tenant: {id: tenantId}})
+    const clientsByTenantId = await this.clientRepository.findBy({ tenant: { id: tenantId } })
 
     return clientsByTenantId;
   }
 
-  async findOne(id: UUID) {
+  async findOne(id: UUID, tenantId: any) {
+
     const clientByTenantId = await this.clientRepository.find({
       where: [
-        {id },
-        { whatsapp: id.toString()}
+        {
+          id,
+          tenant: { id: tenantId }
+        },
+        {
+          whatsapp: id.toString(),
+          tenant: { id: tenantId }
+        }
       ]
     })
+
     return clientByTenantId;
+
   }
 
   update(id: number, updateClientDto: UpdateClientDto) {

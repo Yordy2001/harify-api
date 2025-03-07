@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsString } from "class-validator";
 
 export class CreateClientDto {
 
@@ -7,4 +7,10 @@ export class CreateClientDto {
 
     @IsString()
     whatsapp: string;
+
+    @IsString()
+    gender: string;
+
+    @IsNumber()
+    age: number;
 }
