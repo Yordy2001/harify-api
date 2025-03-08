@@ -6,6 +6,9 @@ export class CreateClientDto {
     name: string;
 
     @IsString()
+    lastName:string;
+    
+    @IsString()
     whatsapp: string;
 
     @IsString()

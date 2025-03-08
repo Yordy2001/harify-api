@@ -57,7 +57,6 @@ export class TenantService {
     }
 
     if (isUUID(term)) {
-      console.log(typeof term);
       isTenant = await this.tenantRepository.findOne({
         where: { id: term },
         cache: true,

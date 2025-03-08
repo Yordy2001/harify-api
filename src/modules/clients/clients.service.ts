@@ -15,50 +15,110 @@ export class ClientsService {
     private readonly clientRepository: Repository<Client>,
   ) { }
 
-  async create({ name, whatsapp }: CreateClientDto, tenantId: string | UUID) {
+  async create(createClientDto: CreateClientDto, tenantId: string | UUID) {
 
-    const client = await this.clientRepository.findOneBy({ whatsapp })
+    const client = await this.clientRepository.findOneBy({ whatsapp: createClientDto.whatsapp })
 
     if (client) return new HttpException('Exite un cliente en este tenant con ese WhatsApp', HttpStatus.CONFLICT)
 
-    const newclient = this.clientRepository.create({ name, whatsapp, tenant: { id: tenantId } })
+    const newclient = this.clientRepository.create({
+      name: createClientDto.name,
+      last_name: createClientDto.lastName,
+      whatsapp: createClientDto.whatsapp,
+      gender: createClientDto.gender,
+      age: createClientDto.age,
+      tenant: { id: tenantId }
+    })
 
-    await this.clientRepository.save(newclient)
+    try {
+      await this.clientRepository.save(newclient)
 
-    return { name, whatsapp };
+    } catch (error) {
+      console.log('', error);
+      return new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+
+    return {
+      newclient,
+      status: HttpStatus.OK,
+    };
   }
 
   async findAll(tenantId: string | UUID) {
 
-    const clientsByTenantId = await this.clientRepository.findBy({ tenant: { id: tenantId } })
+    try {
 
-    return clientsByTenantId;
-  }
-
-  async findOne(id: UUID, tenantId: any) {
-
-    const clientByTenantId = await this.clientRepository.find({
-      where: [
-        {
-          id,
-          tenant: { id: tenantId }
+      const clientsByTenantId = await this.clientRepository.find({
+        select: {
+          name: true,
+          last_name: true,
+          whatsapp: true,
+          gender: true,
+          age: true
         },
-        {
-          whatsapp: id.toString(),
-          tenant: { id: tenantId }
-        }
-      ]
-    })
+        where: { tenant: { id: tenantId } },
+        withDeleted: false // Skip clients with deletet column true
+      })
 
+      return clientsByTenantId;
+    } catch (error) {
+      console.log('FindAll clients', error);
+      throw new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
+  }
+
+  async findOne(id: UUID, tenantId: any): Promise<Partial<Client> | null> {
+    let clientByTenantId: Partial<Client> | null = null;
+
+    try {
+      clientByTenantId = await this.clientRepository.findOne({
+        where: [
+          {
+            id,
+            tenant: { id: tenantId }
+          },
+          {
+            whatsapp: id.toString(),
+            tenant: { id: tenantId }
+          }
+        ]
+      })
+
+      if (!clientByTenantId) return new HttpException(`Client with ${id} not found`, HttpStatus.NOT_FOUND)
+
+      return clientByTenantId;
+    } catch (error) {
+
+      console.log('finOne client', error);
+      new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
+    }
     return clientByTenantId;
+  }
+
+  async update(id: UUID, tenantId: any, updateClientDto: UpdateClientDto) {
+    const client = await this.findOne(id, tenantId)
+
+    try {
+      await this.clientRepository.update({ id: client?.id }, updateClientDto)
+      return `client with name ${client?.name} updated`;
+
+    } catch (error) {
+      console.log(error);
+      return new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
   }
 
-  update(id: number, updateClientDto: UpdateClientDto) {
-    return `This action updates a #${id} client`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} client`;
+  async remove(term: UUID, tenantId: any) {
+    const client = await this.findOne(term, tenantId);
+    if (client) {
+      try {
+        await this.clientRepository.softRemove(client);
+      } catch (error) {
+        console.log(error);
+        return new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
+      }
+      return `client removed`;
+    }
   }
 }
