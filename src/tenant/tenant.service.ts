@@ -21,10 +21,8 @@ export class TenantService {
 
 
   async create(createTenantDto: CreateTenantDto) {
-    console.log(createTenantDto);
-    
     const isTenant = await this.tenantRepository.findOneBy({ subdomain: createTenantDto.subdomain});
-    
+  
     if (isTenant) return new HttpException(`Tenant ${isTenant.name} already used`, HttpStatus.CONFLICT);
     const tenant = this.tenantRepository.create(createTenantDto);
 
