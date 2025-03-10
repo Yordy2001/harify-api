@@ -40,9 +40,9 @@ export class BussinesServicesController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
+  remove(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
     const tenantId: UUID | string = req.user.tenantId
 
-    return this.bussinesServices.remove(+id);
+    return this.bussinesServices.remove(id, tenantId);
   }
 }

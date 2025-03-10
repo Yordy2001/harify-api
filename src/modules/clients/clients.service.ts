@@ -17,7 +17,13 @@ export class ClientsService {
 
   async create(createClientDto: CreateClientDto, tenantId: string | UUID) {
 
-    const client = await this.clientRepository.findOneBy({ whatsapp: createClientDto.whatsapp })
+    const client = await this.clientRepository.findOne({
+      where: {
+        whatsapp: createClientDto.whatsapp,
+        tenant: { id: tenantId },
+      },
+      withDeleted: false
+    })
 
     if (client) return new HttpException('Exite un cliente en este tenant con ese WhatsApp', HttpStatus.CONFLICT)
 
@@ -50,6 +56,7 @@ export class ClientsService {
 
       const clientsByTenantId = await this.clientRepository.find({
         select: {
+          id: true,
           name: true,
           last_name: true,
           whatsapp: true,
@@ -100,7 +107,7 @@ export class ClientsService {
 
     try {
       await this.clientRepository.update({ id: client?.id }, updateClientDto)
-      return `client with name ${client?.name} updated`;
+      return { msg: `client with name ${client?.name} updated`, status: HttpStatus.ACCEPTED };
 
     } catch (error) {
       console.log(error);
@@ -114,11 +121,11 @@ export class ClientsService {
     if (client) {
       try {
         await this.clientRepository.softRemove(client);
+        return HttpStatus.NO_CONTENT
       } catch (error) {
         console.log(error);
         return new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
       }
-      return `client removed`;
     }
   }
 }

@@ -34,7 +34,7 @@ export class BussinesServices {
     return newService;
   }
 
-  async findAll(tenantId: UUID | string): Promise<any> {
+  async findAll(tenantId: UUID | string): Promise<BussinesService[]> {
 
     try {
       const services = await this.bussinesServiceRepository.find({
@@ -79,17 +79,28 @@ export class BussinesServices {
   async update(id: UUID, updateBussinesServiceDto: UpdateBussinesServiceDto, tenantId: string | UUID) {
     await this.findOne(id, tenantId);
     try {
-     
-      await this.bussinesServiceRepository.update(id, updateBussinesServiceDto);  
+
+      const updatedSerice = await this.bussinesServiceRepository.update(id, updateBussinesServiceDto);
+      return {
+        msg: 'Service updated',
+        data: updatedSerice
+      }
     } catch (error) {
-      return new HttpException('error al actualizar servicio', HttpStatus.INTERNAL_SERVER_ERROR)
+      return new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR)
     }
-    
-    return `This action updates a #${id} bussinesService`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} bussinesService`;
-  }
-
+  async remove(id: UUID, tenantId: string) {
+    await this.findOne(id, tenantId);
+    try {
+      await this.bussinesServiceRepository.delete(id);
+      return {
+        msg: 'Service deleted',
+        status: HttpStatus.NO_CONTENT
+      }
+    } catch (error) {
+      console.log('Delete service', error);
+      throw new HttpException('interal server error', HttpStatus.INTERNAL_SERVER_ERROR);
+    };
+  };
 }
