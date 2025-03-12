@@ -39,6 +39,7 @@ export class BussinesServices {
     try {
       const services = await this.bussinesServiceRepository.find({
         select: {
+          id: true,
           name: true,
           duration: true,
           price: true,

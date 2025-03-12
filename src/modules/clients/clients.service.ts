@@ -17,6 +17,7 @@ export class ClientsService {
 
   async create(createClientDto: CreateClientDto, tenantId: string | UUID) {
 
+    // ! Todo! Add validation "if exits a client with same whatspp" before create client
     const client = await this.clientRepository.findOne({
       where: {
         whatsapp: createClientDto.whatsapp,
@@ -29,7 +30,7 @@ export class ClientsService {
 
     const newclient = this.clientRepository.create({
       name: createClientDto.name,
-      last_name: createClientDto.lastName,
+      last_name: createClientDto.last_name,
       whatsapp: createClientDto.whatsapp,
       gender: createClientDto.gender,
       age: createClientDto.age,
@@ -74,40 +75,32 @@ export class ClientsService {
     }
   }
 
-  async findOne(id: UUID, tenantId: any): Promise<Partial<Client> | null> {
+  async findOne(term: UUID, tenantId: any): Promise<Partial<Client> | null> {
     let clientByTenantId: Partial<Client> | null = null;
 
     try {
       clientByTenantId = await this.clientRepository.findOne({
-        where: [
-          {
-            id,
-            tenant: { id: tenantId }
-          },
-          {
-            whatsapp: id.toString(),
-            tenant: { id: tenantId }
-          }
-        ]
+        where: {
+          id: term,
+          tenant: { id: tenantId }
+        },
       })
 
-      if (!clientByTenantId) return new HttpException(`Client with ${id} not found`, HttpStatus.NOT_FOUND)
+      if (!clientByTenantId) throw new HttpException(`Client with ${term} not found`, HttpStatus.NOT_FOUND)
 
       return clientByTenantId;
     } catch (error) {
-
       console.log('finOne client', error);
-      new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
+      throw new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
     }
-    return clientByTenantId;
   }
 
   async update(id: UUID, tenantId: any, updateClientDto: UpdateClientDto) {
-    const client = await this.findOne(id, tenantId)
+    const client = await this.findOne(id, tenantId);
 
     try {
-      await this.clientRepository.update({ id: client?.id }, updateClientDto)
-      return { msg: `client with name ${client?.name} updated`, status: HttpStatus.ACCEPTED };
+      await this.clientRepository.update({ id: client?.id }, updateClientDto);
+      return { msg: `client with name ${client?.id} updated`, status: HttpStatus.ACCEPTED };
 
     } catch (error) {
       console.log(error);
@@ -129,3 +122,7 @@ export class ClientsService {
     }
   }
 }
+
+// ! Todo! Return good status code
+// ! Todo! return json {msg: message, status: Status code}
+// ! Todo! Validate tenantId
