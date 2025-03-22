@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
 import { Tenant } from "src/tenant/entities/tenant.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity('services')
 export class BussinesService {
@@ -26,4 +26,10 @@ export class BussinesService {
 
     @ManyToOne(() => Tenant, { nullable: false })
     tenant: Tenant
+
+    @BeforeInsert()
+    @BeforeUpdate()
+    formatName() {
+        this.name = this.name.toLowerCase().replace(/\s+/g, '_'); // Convierte a minúsculas y reemplaza espacios por _
+    }
 }

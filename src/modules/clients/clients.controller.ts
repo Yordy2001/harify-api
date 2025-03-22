@@ -1,10 +1,10 @@
+import { UUID } from 'crypto';
 import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { AuthenticatedRequest } from 'src/shared/interfaces/autenticated-request.interface';
-import { UUID } from 'crypto';
 
 @Controller('clients')
 @UseGuards(AuthGuard('jwt'))

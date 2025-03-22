@@ -15,7 +15,7 @@ export class BussinesServices {
     private bussinesServiceRepository: Repository<BussinesService>,
   ) { }
 
-  async create(createBussinesServiceDto: CreateBussinesServiceDto, tenantId: UUID | string): Promise<Partial<BussinesService>> {
+  async create(createBussinesServiceDto: CreateBussinesServiceDto, tenantId: UUID | string) {
 
     const newService = this.bussinesServiceRepository.create({
       name: createBussinesServiceDto.name,
@@ -26,15 +26,17 @@ export class BussinesServices {
 
     try {
       await this.bussinesServiceRepository.save(newService)
+      return {
+        msg: 'Service created sussces',
+        status: HttpStatus.CREATED
+      }
     } catch (error) {
       console.log(error);
       throw new HttpException('', HttpStatus.INTERNAL_SERVER_ERROR)
     }
-
-    return newService;
   }
 
-  async findAll(tenantId: UUID | string): Promise<BussinesService[]> {
+  async findAll(tenantId: UUID | string): Promise<any> {
 
     try {
       const services = await this.bussinesServiceRepository.find({
@@ -49,7 +51,10 @@ export class BussinesServices {
         },
         relations: { tenant: true }
       })
-      return services;
+      return services.map(service => ({
+        ...service,
+        name: this.formatToTitleCase(service.name),
+      }));;
     } catch (error) {
       console.log('findAll services', error);
       throw new HttpException('internat server error', HttpStatus.INTERNAL_SERVER_ERROR)
@@ -104,4 +109,11 @@ export class BussinesServices {
       throw new HttpException('interal server error', HttpStatus.INTERNAL_SERVER_ERROR);
     };
   };
+
+  private formatToTitleCase(name: string): any {
+    return name
+      .split('_')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
 }
