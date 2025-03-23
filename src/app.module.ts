@@ -10,6 +10,7 @@ import { TenantMiddleware } from './shared/middleware/tenat.middleware';
 import { ClientsModule } from './modules/clients/clients.module';
 import { BussinesServicesModule } from './modules/bussines-services/bussines-services.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     ClientsModule,
     BussinesServicesModule,
     InventoryModule,
+    AppointmentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
