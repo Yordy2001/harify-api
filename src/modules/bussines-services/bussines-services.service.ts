@@ -27,7 +27,7 @@ export class BussinesServices {
     try {
       await this.bussinesServiceRepository.save(newService)
       return {
-        msg: 'Service created sussces',
+        msg: 'Service successfully added',
         status: HttpStatus.CREATED
       }
     } catch (error) {

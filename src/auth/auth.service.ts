@@ -25,7 +25,7 @@ export class AuthService {
 
     const checkPassword = await compare(password, user.password);
 
-    if (!checkPassword) return new HttpException('Credenciales invalidas', HttpStatus.FORBIDDEN)
+    if (!checkPassword) return new HttpException('Invalid credentials', HttpStatus.FORBIDDEN)
 
     return user;
   }
@@ -36,7 +36,7 @@ export class AuthService {
       relations: ['tenant']
     })
     
-    if (user) return new HttpException('Email registrado en espacio de trabajo', HttpStatus.CONFLICT)
+    if (user) return new HttpException('Email used in this workspace', HttpStatus.CONFLICT)
 
     const saltOrRounds = 10;
 

@@ -12,10 +12,7 @@ export class Appointment {
     id: UUID;
 
     @Column('timestamp')
-    start_time: Timestamp;
-
-    @Column('timestamp')
-    end_time: Timestamp;
+    date: Timestamp;
 
     @Column({ type: 'varchar', enum: APPOITMENT_STATUS, default: APPOITMENT_STATUS.PENDING })
     status: string;

@@ -13,7 +13,7 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
     const token = request.cookies?.token;
 
-    if (!token) throw new UnauthorizedException('No estás autenticado')
+    if (!token) throw new UnauthorizedException('No authenticated')
 
     try {
       const payload = this.jwtService.verify(token);
