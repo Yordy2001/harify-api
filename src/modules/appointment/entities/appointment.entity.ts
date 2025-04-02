@@ -31,9 +31,9 @@ export class Appointment {
     @ManyToOne(() => User, { nullable: false })
     user_id: User;
 
-    @OneToMany( ()=> AppointmentClient, (ac) => ac.appoitment_id, {onDelete: 'CASCADE'})
+    @OneToMany(() => AppointmentClient, (ac) => ac.appoitment_id, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
     appointmentClients: AppointmentClient[];
 
-    @OneToMany(() => AppoitmenService, (as) => as.appointment, {onUpdate: 'CASCADE'})
+    @OneToMany(() => AppoitmenService, (as) => as.appointment, { onUpdate: 'CASCADE', onDelete: 'CASCADE' })
     appointmentServices: AppoitmenService[];
 }

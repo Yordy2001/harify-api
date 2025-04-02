@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateAppointmentDto } from './create-appointment.dto';
+import { IsDateString, IsEnum, IsOptional } from 'class-validator';
+import { APPOITMENT_STATUS } from '../enums/appoitment-status.enum';
 
-export class UpdateAppointmentDto extends PartialType(CreateAppointmentDto) {}
+export class UpdateAppointmentDto {
+
+    @IsOptional()
+    @IsOptional()
+    @IsEnum(APPOITMENT_STATUS)
+    status: APPOITMENT_STATUS;
+
+    @IsOptional()
+    @IsOptional()
+    @IsDateString()
+    date: string;
+}

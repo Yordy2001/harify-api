@@ -23,7 +23,7 @@ export class AppointmentController {
   @Get()
   async findAll(@Req() req: AuthenticatedRequest) {
     const tenantId = req.user.tenantId;
-   
+
     return await this.appointmentService.findAll(tenantId);
   }
 
@@ -35,16 +35,19 @@ export class AppointmentController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string,
+  async update(@Param('id') id: UUID,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
     @Req() req: AuthenticatedRequest) {
+
     const tenantId = req.user.tenantId;
 
     return await this.appointmentService.update(id, updateAppointmentDto, tenantId);
   }
 
   @Delete(':id')
- async remove(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
-    return await this.appointmentService.remove(id);
+  async remove(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
+    const tenantId = req.user.tenantId;
+
+    return await this.appointmentService.remove(id, tenantId);
   }
 }

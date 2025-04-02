@@ -114,24 +114,39 @@ export class AppointmentService {
     }
   }
 
-  update(id: string, updateAppointmentDto: UpdateAppointmentDto, tenantId: string) {
-    return `This action updates a #${id} appointment`;
+  async update(id: UUID, updateAppointmentDto: UpdateAppointmentDto, tenantId: string) {
+
+    const isAppointment = await this._appointmentRepository.findOne({ where: { id, tenant_id: { id: tenantId } } });
+
+    if (!isAppointment) throw new NotFoundException(`Appointment with id: ${id} not found`)
+
+
+    try {
+      const updatedAppointment = await this._appointmentRepository.update(isAppointment.id, updateAppointmentDto);
+      return {
+        msg: `Appointment updated`,
+        data: updatedAppointment
+      }
+    } catch (error) {
+      console.log('Update Appointment: ', error);
+      throw new InternalServerErrorException();
+    }
   }
 
-  async remove(id: UUID) {
+  async remove(id: UUID, tenantId: string) {
 
-    const isAppointment = await this._appointmentRepository.findOne({ where: { id } });
+    const isAppointment = await this._appointmentRepository.findOne({ where: { id, tenant_id: { id: tenantId } } });
 
     if (!isAppointment) throw new NotFoundException(`Appointment with id: ${id} not found`)
 
     try {
-    
+
       await this._appointmentRepository.delete(isAppointment.id);
       throw new HttpException('Appointment deleted', HttpStatus.NO_CONTENT)
-    
+
     } catch (error: any) {
-    
-      console.log(error.code, error);
+
+      console.log('Delete Appointment: ',error);
       throw new InternalServerErrorException()
     }
 
