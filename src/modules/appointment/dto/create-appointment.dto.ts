@@ -4,11 +4,11 @@ export class CreateAppointmentDto {
   
   @IsUUID()
   @IsNotEmpty()
-  clientId: string;
+  clientId: string[];
 
   @IsUUID()
   @IsNotEmpty()
-  serviceId: string;
+  serviceId: string[];
 
   @IsDateString()
   @IsNotEmpty()

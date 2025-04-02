@@ -1,18 +1,18 @@
 import { UUID } from "crypto";
 import { CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
-import { AppointmentClient } from "./appointment-client.entity";
 import { BussinesService } from "src/modules/bussines-services/entities/bussines-service.entity";
+import { Appointment } from "./appointment.entity";
 
-@Entity()
+@Entity('appointment_service')
 export class AppoitmenService {
     @PrimaryGeneratedColumn('uuid')
     id: UUID;
 
-    @ManyToOne(() => BussinesService, { nullable: false })
-    bussines_service_id: BussinesService;
+    @ManyToOne(() => BussinesService, { nullable: false, eager: true })
+    service: BussinesService;
 
-    @ManyToOne(() => AppointmentClient, { nullable: false })
-    appoitment_client_id: AppointmentClient;
+    @ManyToOne(() => Appointment, { nullable: false, onDelete: 'CASCADE' })
+    appointment: Appointment;
 
     @CreateDateColumn()
     created_at: Timestamp;

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Req, ParseUUIDPipe } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { UUID } from 'crypto';
 
@@ -14,41 +14,37 @@ export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) { }
 
   @Post()
-  create(@Body() createAppointmentDto: CreateAppointmentDto, @Req() req: AuthenticatedRequest) {
+  async create(@Body() createAppointmentDto: CreateAppointmentDto, @Req() req: AuthenticatedRequest) {
 
     const user = req.user;
-    return this.appointmentService.create(createAppointmentDto, user.tenantId, user.id);
+    return await this.appointmentService.create(createAppointmentDto, user.tenantId, user.id);
   }
 
   @Get()
-  findAll(@Req() req: AuthenticatedRequest) {
+  async findAll(@Req() req: AuthenticatedRequest) {
     const tenantId = req.user.tenantId;
    
-    
-    return this.appointmentService.findAll(tenantId);
+    return await this.appointmentService.findAll(tenantId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
+  async findOne(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
     const tenantId = req.user.tenantId;
 
-    return this.appointmentService.findOne(id, tenantId);
+    return await this.appointmentService.findOne(id, tenantId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string,
+  async update(@Param('id') id: string,
     @Body() updateAppointmentDto: UpdateAppointmentDto,
     @Req() req: AuthenticatedRequest) {
     const tenantId = req.user.tenantId;
 
-    return this.appointmentService.update(id, updateAppointmentDto, tenantId);
+    return await this.appointmentService.update(id, updateAppointmentDto, tenantId);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Req() req: AuthenticatedRequest) {
-
-    const tenantId = req.user.tenantId;
-
-    return this.appointmentService.remove(id);
+ async remove(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
+    return await this.appointmentService.remove(id);
   }
 }

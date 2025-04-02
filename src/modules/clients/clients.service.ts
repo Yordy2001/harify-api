@@ -7,6 +7,10 @@ import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
 import { Client } from './entities/client.entity';
 
+// ! Todo! Return good status code
+// ! Todo! return json {msg: message, status: Status code}
+// ! Todo! Validate tenantId
+
 @Injectable()
 export class ClientsService {
 
@@ -26,7 +30,9 @@ export class ClientsService {
       withDeleted: false
     })
 
-    if (client) return new HttpException('Exite un cliente en este tenant con ese WhatsApp', HttpStatus.CONFLICT)
+    if (client){ 
+      throw new HttpException('Exite un cliente en este tenant con ese WhatsApp', HttpStatus.CONFLICT)
+    }
 
     const newclient = this.clientRepository.create({
       name: createClientDto.name,
@@ -39,16 +45,16 @@ export class ClientsService {
 
     try {
       await this.clientRepository.save(newclient)
+      return {
+        newclient,
+        status: HttpStatus.OK,
+      };
 
     } catch (error) {
       console.log('', error);
       return new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
     }
 
-    return {
-      newclient,
-      status: HttpStatus.OK,
-    };
   }
 
   async findAll(tenantId: string | UUID) {
@@ -122,7 +128,3 @@ export class ClientsService {
     }
   }
 }
-
-// ! Todo! Return good status code
-// ! Todo! return json {msg: message, status: Status code}
-// ! Todo! Validate tenantId

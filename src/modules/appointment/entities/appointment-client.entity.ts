@@ -16,8 +16,7 @@ export class AppointmentClient {
     @UpdateDateColumn()
     updated_at: Timestamp;
 
-
-    @ManyToOne(()=> Appointment, {nullable: false})
+    @ManyToOne(()=> Appointment, {nullable: false, onDelete: 'CASCADE'})
     appoitment_id: Appointment;
 
     @ManyToOne(()=> Client, {nullable: false})
