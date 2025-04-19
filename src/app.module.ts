@@ -11,6 +11,7 @@ import { ClientsModule } from './modules/clients/clients.module';
 import { BussinesServicesModule } from './modules/bussines-services/bussines-services.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
+import { InvoiceModule } from './modules/invoice/invoice.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
         database: configService.get<string>('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true, // develop mode only
-        // logging: true, // Log querys only for test
+       // logging: true, // Log querys only for test
       }),
     }),
     AuthModule,
@@ -36,6 +37,7 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
     BussinesServicesModule,
     InventoryModule,
     AppointmentModule,
+    InvoiceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

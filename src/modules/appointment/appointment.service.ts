@@ -56,7 +56,7 @@ export class AppointmentService {
         select: {
           id: true,
           status: true,
-          // date: true,
+          date: true as any,
         },
         relations: [
           // 'user_id',
@@ -89,7 +89,7 @@ export class AppointmentService {
         select: {
           id: true,
           status: true,
-          // date: true,
+          date: true as any,
         },
         relations: [
           // 'user_id',
@@ -120,6 +120,7 @@ export class AppointmentService {
 
     if (!isAppointment) throw new NotFoundException(`Appointment with id: ${id} not found`)
 
+    console.log(updateAppointmentDto);
 
     try {
       const updatedAppointment = await this._appointmentRepository.update(isAppointment.id, updateAppointmentDto);
@@ -142,11 +143,14 @@ export class AppointmentService {
     try {
 
       await this._appointmentRepository.delete(isAppointment.id);
-      throw new HttpException('Appointment deleted', HttpStatus.NO_CONTENT)
+      return {
+        msg: ``,
+        status: HttpStatus.NO_CONTENT
+      }
 
     } catch (error: any) {
 
-      console.log('Delete Appointment: ',error);
+      console.log('Delete Appointment: ', error);
       throw new InternalServerErrorException()
     }
 

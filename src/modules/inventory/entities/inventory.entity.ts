@@ -39,6 +39,7 @@ export class Inventory {
     @ManyToOne(() => Suppliers, { nullable: true })
     supplier: Suppliers
 
+    // replace space fot _ to prevent 
     @BeforeInsert()
     @BeforeUpdate()
     formatName() {

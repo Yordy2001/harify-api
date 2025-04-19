@@ -1,4 +1,4 @@
-import { IsDateString, IsEnum, IsOptional } from 'class-validator';
+import { IsDateString, IsEnum, IsNotEmpty, IsOptional, IsUUID } from 'class-validator';
 import { APPOITMENT_STATUS } from '../enums/appoitment-status.enum';
 
 export class UpdateAppointmentDto {
@@ -12,4 +12,14 @@ export class UpdateAppointmentDto {
     @IsOptional()
     @IsDateString()
     date: string;
+
+    @IsOptional()
+    @IsUUID()
+    @IsNotEmpty()
+    clientId: string[];
+
+    @IsOptional()
+    @IsUUID()
+    @IsNotEmpty()
+    serviceId: string[];
 }

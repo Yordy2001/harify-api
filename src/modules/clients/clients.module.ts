@@ -11,6 +11,6 @@ import { TenantModule } from 'src/tenant/tenant.module';
   ],
   controllers: [ClientsController],
   providers: [ClientsService],
-  exports: [ClientsModule]
+  exports: [ClientsModule, ClientsService]
 })
 export class ClientsModule { }
