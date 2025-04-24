@@ -46,4 +46,10 @@ export class ClientsController {
 
     return this.clientsService.remove(id, tenantId);
   }
+
+  @Get('verify/:tel')
+  verifyByTel(@Param('tel') tel: UUID, @Req() req: AuthenticatedRequest) {
+    const tenantId = req.user.tenantId;
+    return this.clientsService.verifyByTell(tel, tenantId);
+  }
 }

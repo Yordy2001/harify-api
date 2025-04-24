@@ -30,7 +30,7 @@ export class ClientsService {
       withDeleted: false
     })
 
-    if (client){ 
+    if (client) {
       throw new HttpException('Exite un cliente en este tenant con ese WhatsApp', HttpStatus.CONFLICT)
     }
 
@@ -126,5 +126,24 @@ export class ClientsService {
         return new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)
       }
     }
+  }
+
+  async verifyByTell(tel: string, tenantId: string): Promise<boolean | HttpException> {
+    console.log("tel", tel);
+    
+    // let client: Client | null;
+    // try {
+    //   client = await this.clientRepository.findOne({
+    //     where: {
+    //       tenant: { id: tenantId },
+    //       whatsapp: tel
+    //     }
+    //   })
+    // } catch(error) {
+    //   console.log('verifyByTell ', error);
+    //   return new HttpException('server error', HttpStatus.INTERNAL_SERVER_ERROR)    
+    // }
+    // if (!client) return false
+    return true;
   }
 }

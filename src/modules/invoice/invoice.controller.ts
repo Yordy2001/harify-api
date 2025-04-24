@@ -9,7 +9,7 @@ import { UUID } from 'crypto';
 @Controller('invoice')
 @UseGuards(AuthGuard('jwt'))
 export class InvoiceController {
-  constructor(private readonly invoiceService: InvoiceService) {}
+  constructor(private readonly invoiceService: InvoiceService) { }
 
   @Post()
   create(@Body() createInvoiceDto: CreateInvoiceDto, @Req() req: AuthenticatedRequest) {
@@ -19,12 +19,14 @@ export class InvoiceController {
   }
 
   @Get()
-  findAll() {
-    return this.invoiceService.findAll();
+  findAll(@Req() req: AuthenticatedRequest) {
+    const tenantId = req.user.tenantId;
+
+    return this.invoiceService.findAll(tenantId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: UUID,  @Req() req: AuthenticatedRequest) {
+  findOne(@Param('id') id: UUID, @Req() req: AuthenticatedRequest) {
     const tenantId = req.user.tenantId;
 
     return this.invoiceService.findOne(id, tenantId);

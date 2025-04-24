@@ -17,7 +17,7 @@ export class AuthService {
 
   async validateUser(email, password, tenantId): Promise<any> {
     const user = await this.userRepository.findOne({
-      where: { email, tenant: {subdomain: tenantId} },
+      where: { email, tenant: { subdomain: tenantId } },
       relations: ['tenant'],
     });
 
@@ -35,7 +35,7 @@ export class AuthService {
       where: { email: userData.email },
       relations: ['tenant']
     })
-    
+
     if (user) return new HttpException('Email used in this workspace', HttpStatus.CONFLICT)
 
     const saltOrRounds = 10;
@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { id: user.id, email: user.email, role: user.role, tenantId: user.tenant.id, tenantSubdomain: user.tenant.subdomain}
+    const payload = { id: user.id, email: user.email, name: user.name, role: user.role, tenantId: user.tenant.id, tenantSubdomain: user.tenant.subdomain }
     const token = this.jwtService.sign(payload)
     return { token }
   }

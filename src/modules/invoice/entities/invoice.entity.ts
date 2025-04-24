@@ -1,9 +1,10 @@
 import { UUID } from "crypto";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, Timestamp, UpdateDateColumn } from "typeorm";
 import { PaymentMethodEnum } from "../enums/payment-method.enum";
 import { Tenant } from "src/tenant/entities/tenant.entity";
 import { Client } from "src/modules/clients/entities/client.entity";
 import { InvoiceStatusEnum } from "../enums/invoice-status.enum";
+import { InvoiceItem } from "./invoice-item.entity";
 
 @Entity()
 export class Invoice {
@@ -30,4 +31,7 @@ export class Invoice {
 
     @ManyToOne(() => Client, { nullable: false })
     client: Client
+
+    @OneToMany(() => InvoiceItem, (ii) => ii.invoice, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+    invoiceItems: InvoiceItem[];
 }

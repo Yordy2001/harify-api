@@ -11,8 +11,8 @@ export class BussinesService {
     @Column()
     name: string;
 
-    @Column()
-    duration: string;
+    @Column({nullable: true, default: 'NA'})
+    duration?: string;
 
     @Column()
     price: number;

@@ -64,14 +64,12 @@ export class InvoiceService {
     }
   }
 
-  findAll() {
-    
-    return `This action returns all invoice`;
+  async findAll(tenantId: string) {
+    return await this._invoiceItemRepository.find()
   }
 
   findOne(id: UUID, tenantId: string) {
     return this._invoiceRepository.findOne({ where: { id } });
-    return `This action returns a #${id} invoice`;
   }
 
   update(id: number, updateInvoiceDto: UpdateInvoiceDto) {
