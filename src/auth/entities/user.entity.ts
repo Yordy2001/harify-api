@@ -13,23 +13,20 @@ export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   email: string;
 
-  @Column()
+  @Column({nullable: false})
   password: string;
+
+  @Column({ nullable: false})
+  name: string;
 
   @Column('text', { array: true, default: ['user'] })
   role: string[];
 
   @ManyToOne(() => Tenant, { nullable: false })
   tenant: Tenant
-  // @ManyToMany(() => Tenant, (tenant) => tenant.users)
-  // @JoinColumn({ name: 'tenant_id' })
-  // tenant: Tenant;
-
-  // @Column()
-  // tenant_id: string;
 
   @CreateDateColumn()
   created_at: Date;

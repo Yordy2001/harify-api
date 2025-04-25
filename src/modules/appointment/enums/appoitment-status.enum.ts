@@ -1,0 +1,5 @@
+export enum APPOITMENT_STATUS {
+    'PENDING' = 'PENDIENTE',
+    'DECLINE' = 'DECLINADA',
+    'CONFIRM' = 'CONFIRMADA'
+}

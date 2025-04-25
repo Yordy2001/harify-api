@@ -17,7 +17,7 @@ export class AuthService {
 
   async validateUser(email, password, tenantId): Promise<any> {
     const user = await this.userRepository.findOne({
-      where: { email, tenant: {subdomain: tenantId} },
+      where: { email, tenant: { subdomain: tenantId } },
       relations: ['tenant'],
     });
 
@@ -25,7 +25,7 @@ export class AuthService {
 
     const checkPassword = await compare(password, user.password);
 
-    if (!checkPassword) return new HttpException('Credenciales invalidas', HttpStatus.FORBIDDEN)
+    if (!checkPassword) return new HttpException('Invalid credentials', HttpStatus.FORBIDDEN)
 
     return user;
   }
@@ -35,8 +35,8 @@ export class AuthService {
       where: { email: userData.email },
       relations: ['tenant']
     })
-    
-    if (user) return new HttpException('Email registrado en espacio de trabajo', HttpStatus.CONFLICT)
+
+    if (user) return new HttpException('Email used in this workspace', HttpStatus.CONFLICT)
 
     const saltOrRounds = 10;
 
@@ -48,7 +48,7 @@ export class AuthService {
   }
 
   async login(user: User) {
-    const payload = { id: user.id, email: user.email, role: user.role, tenantId: user.tenant.id, tenantSubdomain: user.tenant.subdomain}
+    const payload = { id: user.id, email: user.email, name: user.name, role: user.role, tenantId: user.tenant.id, tenantSubdomain: user.tenant.subdomain }
     const token = this.jwtService.sign(payload)
     return { token }
   }

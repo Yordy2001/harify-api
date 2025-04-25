@@ -10,6 +10,11 @@ import { TenantMiddleware } from './shared/middleware/tenat.middleware';
 import { ClientsModule } from './modules/clients/clients.module';
 import { BussinesServicesModule } from './modules/bussines-services/bussines-services.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { AppointmentModule } from './modules/appointment/appointment.module';
+import { InvoiceModule } from './modules/invoice/invoice.module';
+import { ReportsModule } from './modules/reports/reports.module';
+import { PrinterModule } from './shared/printer/printer.module';
+import cookieParser from 'cookie-parser';
 
 @Module({
   imports: [
@@ -26,7 +31,7 @@ import { InventoryModule } from './modules/inventory/inventory.module';
         database: configService.get<string>('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true, // develop mode only
-        // logging: true, // Log querys only for test
+       // logging: true, // Log querys only for test
       }),
     }),
     AuthModule,
@@ -34,6 +39,10 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     ClientsModule,
     BussinesServicesModule,
     InventoryModule,
+    AppointmentModule,
+    InvoiceModule,
+    ReportsModule,
+    PrinterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

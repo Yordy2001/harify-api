@@ -15,13 +15,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
         const tenantId = req.headers['x-tenant-subdomain'] as string;
 
         if (!tenantId) {
-            throw new HttpException('No se encontró el Tenant', HttpStatus.NOT_FOUND);
+            throw new HttpException('Tenant not found', HttpStatus.NOT_FOUND);
         }
 
         const user = await this.authService.validateUser(email, password, tenantId)
 
         if (!user) {
-            throw new HttpException('Credenciales Incorrectas', HttpStatus.NOT_FOUND)
+            throw new HttpException('Incorrect credentials, email or password', HttpStatus.NOT_FOUND)
         }
 
         return user;
