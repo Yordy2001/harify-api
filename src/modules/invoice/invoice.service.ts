@@ -8,6 +8,8 @@ import { Invoice } from './entities/invoice.entity';
 import { InvoiceItem } from './entities/invoice-item.entity';
 import { UUID } from 'crypto';
 import { ClientsService } from '../clients/clients.service';
+import { PrinterService } from 'src/shared/printer/printer.service';
+import { invoiceReport } from '../reports/document/invoice.report';
 
 @Injectable()
 export class InvoiceService {
@@ -19,9 +21,11 @@ export class InvoiceService {
     private _invoiceItemRepository: Repository<InvoiceItem>,
 
     private clientService: ClientsService,
+
+    private readonly printerService: PrinterService,
   ) { }
 
-  async create(createInvoiceDto: CreateInvoiceDto, tenantId: string) {
+  async create(createInvoiceDto: CreateInvoiceDto, tenantId: string): Promise<PDFKit.PDFDocument> {
 
     const client = await this.clientService.findOne(createInvoiceDto.clientId, tenantId);
 
@@ -52,7 +56,10 @@ export class InvoiceService {
       }
 
       await queryRunner.commitTransaction();
-      return invoice;
+
+      // Generate PDF
+      const docDefinition = invoiceReport(client, invoice, createInvoiceDto);
+      return this.printerService.createPdf(docDefinition);
     }
     catch (error) {
       console.log(error);

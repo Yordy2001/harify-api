@@ -7,11 +7,15 @@ import { Invoice } from './entities/invoice.entity';
 // import { Client } from '../clients/entities/client.entity';
 import { ClientsService } from '../clients/clients.service';
 import { ClientsModule } from '../clients/clients.module';
+import { PrinterModule } from 'src/shared/printer/printer.module';
+import { ReportsModule } from '../reports/reports.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([InvoiceItem, Invoice]),
     ClientsModule,
+    PrinterModule,
+    ReportsModule
   ],
   controllers: [InvoiceController],
   providers: [InvoiceService],

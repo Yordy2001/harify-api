@@ -12,6 +12,9 @@ import { BussinesServicesModule } from './modules/bussines-services/bussines-ser
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { AppointmentModule } from './modules/appointment/appointment.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
+import { ReportsModule } from './modules/reports/reports.module';
+import { PrinterModule } from './shared/printer/printer.module';
+import cookieParser from 'cookie-parser';
 
 @Module({
   imports: [
@@ -38,6 +41,8 @@ import { InvoiceModule } from './modules/invoice/invoice.module';
     InventoryModule,
     AppointmentModule,
     InvoiceModule,
+    ReportsModule,
+    PrinterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

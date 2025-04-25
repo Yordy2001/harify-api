@@ -21,8 +21,8 @@ export class Client {
     @Column({ nullable: true, enum: Gender })
     gender: string;
 
-    @Column({ nullable: true })
-    age: number;
+    @Column({ nullable: false })
+    age: Date;
 
     @CreateDateColumn()
     created_at: Date;
