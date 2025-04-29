@@ -20,6 +20,9 @@ export class CreateInvoiceDto {
 
     @IsString()
     clientId: UUID;
+    
+    @IsString()
+    employId: UUID;
 
     @IsOptional()
     @IsString()

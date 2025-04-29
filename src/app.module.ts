@@ -14,7 +14,7 @@ import { AppointmentModule } from './modules/appointment/appointment.module';
 import { InvoiceModule } from './modules/invoice/invoice.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { PrinterModule } from './shared/printer/printer.module';
-import cookieParser from 'cookie-parser';
+import { EmployeesModule } from './modules/employees/employees.module';
 
 @Module({
   imports: [
@@ -31,7 +31,7 @@ import cookieParser from 'cookie-parser';
         database: configService.get<string>('DATABASE_NAME'),
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: true, // develop mode only
-       // logging: true, // Log querys only for test
+      //  logging: true, // Log querys only for test
       }),
     }),
     AuthModule,
@@ -43,6 +43,7 @@ import cookieParser from 'cookie-parser';
     InvoiceModule,
     ReportsModule,
     PrinterModule,
+    EmployeesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
