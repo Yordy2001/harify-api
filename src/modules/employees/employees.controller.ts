@@ -13,8 +13,6 @@ export class EmployeesController {
   @Post()
   create(@Body() createEmployeeDto: CreateEmployeeDto, @Req() req: AuthenticatedRequest) {
     const tenantId = req.user.tenantId
-    console.log(tenantId);
-
     return this.employeesService.create(createEmployeeDto, tenantId);
   }
 
